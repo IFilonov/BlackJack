@@ -1,27 +1,27 @@
-require_relative 'pack'
+require_relative 'deck'
 
 class Gamer
   attr_accessor :name
-  attr_accessor :pack
+  attr_accessor :deck
 
-  def initialize(name = '')
-    @pack = Pack.new
+  def initialize(name)
+    @deck = Deck.new
     @name = name.capitalize
   end
 
   def cards_name
-    @pack.cards_name
+    @deck.cards_name
   end
 
   def cards_sum
-    @pack.sum
+    @deck.sum
   end
 
   def cards_num
-    @pack.cards.size
+    @deck.cards.size
   end
 
   def add_cards(cards)
-    @pack.add_cards(cards)
+    @deck.add_cards(cards)
   end
 end

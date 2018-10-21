@@ -9,8 +9,6 @@ module GameConstants
     { label: 'Show cards', handler: :show_and_finish_game, exit_loop: true }
   ].freeze
 
-  QUIT_MENU = 'q'.freeze
-
   ONE_GAME_MONEY = 10
 
   MAX_CARDS = 3

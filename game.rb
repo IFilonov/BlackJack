@@ -1,29 +1,33 @@
 require_relative 'gamer'
-require_relative 'game_pack'
+require_relative 'game_deck'
 require_relative 'bank'
 require_relative 'game_process'
+require_relative 'interface'
 
 class Game
   include GameProcess
 
   def initialize
-    puts 'Black Jack'
+    @interface = Interface.new
     @bank = Bank.new
-    @game_pack = GamePack.new
+    @game_deck = GameDeck.new
     @dealer = Gamer.new('Dealer')
   end
 
   def main
-    puts 'Enter Gamer name:'
-    name = gets.chomp
+    @interface.ask_name
+    name = @interface.input
     @gamer = Gamer.new(name)
     show_start_menu = false
     loop do
       if show_start_menu
-        show_menu(START_MENU)
-        menu_item = gets.chomp.to_s
+        if @bank.enough_money_for_game?
+          menu_item = @interface.show_start_menu
+        else
+          menu_item = @interface.bank_empty_game_over
+        end
       end
-      break if menu_item == QUIT_MENU
+      break if @interface.break(menu_item)
 
       call_item_handler(START_MENU, menu_item)
       show_start_menu = true
@@ -32,15 +36,12 @@ class Game
 
   private
 
-  def show_menu(menu)
-    puts "Enter number to select menu item or type #{QUIT_MENU} to exit:"
-    menu.each_with_index { |value, index| puts "#{index} - #{value[:label]}" }
-  end
-
   def call_item_handler(menu, item)
     item = '0' if item.nil?
-    send(menu[item.to_i][:handler]) if menu[item.to_i] && number?(item)
-    menu[item.to_i][:exit_loop]
+    if menu[item.to_i] && number?(item)
+      send(menu[item.to_i][:handler])
+      menu[item.to_i][:exit_loop]
+    end
   end
 
   def number?(number_str)
