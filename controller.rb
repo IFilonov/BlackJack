@@ -113,14 +113,12 @@ class Controller
     @game_deck.flush
   end
 
-  private
-
   def call_item_handler(menu, item)
     item = '0' if item.nil?
-    if menu[item.to_i] && number?(item)
-      send(menu[item.to_i][:handler])
-      menu[item.to_i][:exit_loop]
-    end
+    return unless menu[item.to_i] && number?(item)
+
+    send(menu[item.to_i][:handler])
+    menu[item.to_i][:exit_loop]
   end
 
   def number?(number_str)
