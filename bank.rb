@@ -1,6 +1,7 @@
 class Bank
   START_SUM_MONEY = 100
   GAME_SUM_MONEY = 10
+
   attr_reader :accounts
 
   def initialize
@@ -12,7 +13,7 @@ class Bank
     @last_sum = 0
   end
 
-  def charge_game(money)
+  def charge_game(money = GAME_SUM_MONEY)
     if @accounts[:gamer] >= money && @accounts[:dealer] >= money
       @accounts[:gamer] -= money
       @accounts[:dealer] -= money
@@ -23,8 +24,9 @@ class Bank
 
   def enough_money_for_game?
     if @accounts[:gamer] >= GAME_SUM_MONEY && @accounts[:dealer] >= GAME_SUM_MONEY
-        return true
+      return true
     end
+
     false
   end
 

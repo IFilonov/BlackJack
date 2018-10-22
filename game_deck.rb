@@ -1,7 +1,6 @@
 require_relative 'deck'
 
 class GameDeck < Deck
-
   def initialize
     super
     fill_cards
@@ -12,6 +11,10 @@ class GameDeck < Deck
       Card::NUMBERS.each { |number| @cards.push(Card.new(number, type)) }
     end
     @cards.shuffle!
+  end
+
+  def get_cards(count)
+    @cards.pop(count) if @cards.size > count
   end
 
   def flush

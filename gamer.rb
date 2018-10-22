@@ -1,12 +1,11 @@
-require_relative 'deck'
+require_relative 'gamer_deck'
 
 class Gamer
   attr_accessor :name
   attr_accessor :deck
 
-  def initialize(name)
-    @deck = Deck.new
-    @name = name.capitalize
+  def initialize
+    @deck = GamerDeck.new
   end
 
   def cards_name
@@ -23,5 +22,9 @@ class Gamer
 
   def add_cards(cards)
     @deck.add_cards(cards)
+  end
+
+  def deck_full?
+    @deck.full?
   end
 end

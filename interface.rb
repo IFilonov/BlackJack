@@ -1,5 +1,4 @@
 class Interface
-
   START_MENU = [
     'Continue game'
   ].freeze
@@ -39,7 +38,7 @@ class Interface
     menu.each_with_index { |value, index| puts "#{index} - #{value}" }
   end
 
-  def ask_name
+  def ask_gamer_name
     puts 'Enter Gamer name:'
   end
 
@@ -55,10 +54,13 @@ class Interface
     'You cannot add more than 3 cards!'
   end
 
-  def show_cards(gamer, hide = false)
+  def show_cards(gamer, dialer, show = false)
     print "#{gamer.name}! "
-    puts "Sum cards: #{hide ? '***' : gamer.deck.sum}, cards:"
-    gamer.cards_name.each { |name| puts hide ? '***' : name }
+    puts "Sum cards: #{gamer.deck.sum}, cards:"
+    gamer.cards_name.each { |name| puts name }
+    print "#{dialer.name}! "
+    puts "Sum cards: #{show ? dialer.deck.sum : '***'}, cards:"
+    dialer.cards_name.each { |name| puts show ? name : '***' }
   end
 
   def show_finish_bank(gamer_name, dealer_name, bank)
@@ -67,7 +69,7 @@ class Interface
   end
 
   def bank_empty_game_over
-    puts "Bank empty! Game over! Type q to exit"
+    puts 'Bank empty! Game over!'
     QUIT_MENU
   end
 
@@ -87,4 +89,3 @@ class Interface
     puts 'Gamer WIN!'
   end
 end
-

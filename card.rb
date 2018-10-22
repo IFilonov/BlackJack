@@ -6,12 +6,13 @@ class Card
 
   ACE_VALUE = 11
   PICT_VALUE = 10
-  ERR_N = "Error! Not correct number!"
-  ERR_T = "Error! Not correct number!"
+  ERR_N = 'Error! Not correct number!'.freeze
+  ERR_T = 'Error! Not correct number!'.freeze
 
   def initialize(number, type)
     raise ERR_M unless NUMBERS.include?(number)
     raise ERR_T unless TYPES.include?(type)
+
     @name = number + type
     @value = calc_value(number)
   end
@@ -20,7 +21,7 @@ class Card
     value = number.to_i
     value = PICT_VALUE if value.zero?
     value = ACE_VALUE if ace?
-    return value
+    value
   end
 
   private
