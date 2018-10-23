@@ -13,6 +13,7 @@ class Controller
 
   BJ_SUM = 21
   BREAK_LOOP = true
+  DO_NOT_EXIT_LOOP = false
   INCORRECT_CHOICE = false
   HIDE_DEALER_CARDS = true
 
@@ -56,7 +57,7 @@ class Controller
         puts e
       end
     end
-    @exit_loop = false
+    @exit_loop = DO_NOT_EXIT_LOOP
   end
 
   def dealer_game

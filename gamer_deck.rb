@@ -1,10 +1,9 @@
 require_relative 'deck'
 
 class GamerDeck < Deck
-  MAX_CARDS_IN_DECK = 3
 
   def add_cards(cards)
-    @cards += cards if @cards.size + cards.size <= MAX_CARDS_IN_DECK
+    @cards += cards if @cards.size + cards.size <= MAX_CARDS_IN_GAMER_DECK
   end
 
   def sum
@@ -20,6 +19,6 @@ class GamerDeck < Deck
   end
 
   def full?
-    @cards.size == MAX_CARDS_IN_DECK
+    @cards.size == MAX_CARDS_IN_GAMER_DECK
   end
 end

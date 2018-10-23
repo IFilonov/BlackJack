@@ -71,7 +71,6 @@ class Interface
 
   def game_over
     puts 'Bank empty! Game over!'
-    QUIT_MENU
   end
 
   def draw

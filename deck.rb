@@ -1,6 +1,8 @@
 require_relative 'card'
 
 class Deck
+  MAX_CARDS_IN_GAMER_DECK = 3
+
   attr_reader :cards
 
   def initialize

@@ -11,6 +11,6 @@ class Dealer < Gamer
   end
 
   def miss_turn?
-    cards_sum >= DEALER_CARDS_SUM || cards_num >= MAX_CARDS_IN_DECK
+    cards_sum >= DEALER_CARDS_SUM || cards_num >= MAX_CARDS_IN_GAMER_DECK
   end
 end
