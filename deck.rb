@@ -8,9 +8,7 @@ class Deck
   end
 
   def cards_name
-    names = []
-    @cards.each { |card| names << card.name }
-    names
+    @cards.map(&:name)
   end
 
   def flush

@@ -19,23 +19,24 @@ class Interface
     gets.chomp.to_s
   end
 
-  def break(menu_item)
+  def break_menu?(menu_item)
     menu_item == QUIT_MENU
   end
 
   def show_start_menu
     show_menu(START_MENU)
-    input
   end
 
   def show_game_menu
     show_menu(GAME_MENU)
-    input
   end
 
   def show_menu(menu)
+    return @menu_item = '0' unless @menu_item
+
     puts "Enter number to select menu item or type #{QUIT_MENU} to exit:"
     menu.each_with_index { |value, index| puts "#{index} - #{value}" }
+    input
   end
 
   def ask_gamer_name
@@ -68,7 +69,7 @@ class Interface
     puts "#{dealer_name} bank: #{bank.dealer_money}"
   end
 
-  def bank_empty_game_over
+  def game_over
     puts 'Bank empty! Game over!'
     QUIT_MENU
   end

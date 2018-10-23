@@ -11,6 +11,8 @@ class Game
     @dealer = Dealer.new
     @gamer = Gamer.new
     @controller = Controller.new(@gamer, @dealer, @bank, @game_deck)
+  rescue StandardError => e
+    puts e
   end
 
   def main

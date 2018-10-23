@@ -7,26 +7,31 @@ class Card
   ACE_VALUE = 11
   PICT_VALUE = 10
   ERR_N = 'Error! Not correct number!'.freeze
-  ERR_T = 'Error! Not correct number!'.freeze
+  ERR_T = 'Error! Not correct type!'.freeze
 
   def initialize(number, type)
-    raise ERR_M unless NUMBERS.include?(number)
-    raise ERR_T unless TYPES.include?(type)
-
+    @number = number
+    @type = type
     @name = number + type
     @value = calc_value(number)
-  end
-
-  def calc_value(number)
-    value = number.to_i
-    value = PICT_VALUE if value.zero?
-    value = ACE_VALUE if ace?
-    value
+    validate!
   end
 
   private
 
+  def calc_value(number)
+    if number.to_i.to_s == number
+      number.to_i
+    else ace? ? ACE_VALUE : PICT_VALUE
+    end
+  end
+
   def ace?
-    @name.include?('T')
+    @name.include?(NUMBERS.last)
+  end
+
+  def validate!
+    raise ERR_N unless NUMBERS.include?(@number)
+    raise ERR_T unless TYPES.include?(@type)
   end
 end

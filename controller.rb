@@ -1,17 +1,20 @@
 require_relative 'interface'
 
 class Controller
-  START_MENU = [
-    { handler: :process_game, exit_loop: false }
+  START_MENU_HANDLERS = [
+    { handler: :process_game }
   ].freeze
 
-  GAME_MENU = [
-    { handler: :skip_the_game, exit_loop: false },
-    { handler: :add_cards, exit_loop: false },
-    { handler: :show_and_finish_game, exit_loop: true }
+  GAME_MENU_HANLDERS = [
+    { handler: :dealer_game },
+    { handler: :gamer_add_cards },
+    { handler: :finish_game }
   ].freeze
 
   BJ_SUM = 21
+  BREAK_LOOP = true
+  INCORRECT_CHOICE = false
+  HIDE_DEALER_CARDS = true
 
   def initialize(gamer, dealer, bank, game_deck)
     @gamer = gamer
@@ -24,19 +27,12 @@ class Controller
   def main
     @interface.ask_gamer_name
     @gamer.name = @interface.input
-    show_start_menu = false
     loop do
-      if show_start_menu
-        menu_item = if @bank.enough_money_for_game?
-                      @interface.show_start_menu
-                    else
-                      @interface.bank_empty_game_over
-                    end
-      end
-      break if @interface.break(menu_item)
+      return @interface.game_over unless @bank.enough_money_for_game?
 
-      call_item_handler(START_MENU, menu_item)
-      show_start_menu = true
+      menu_item = @interface.show_start_menu
+      call_item_handler(START_MENU_HANDLERS, menu_item)
+      break if @exit_loop
     end
   end
 
@@ -54,37 +50,37 @@ class Controller
     loop do
       begin
         item = @interface.show_game_menu
-        break if @interface.break(item) || call_item_handler(GAME_MENU, item)
-
-        if @dealer.deck_full? && @gamer.deck_full?
-          show_and_finish_game
-          return
-        end
+        call_item_handler(GAME_MENU_HANLDERS, item)
+        break if @exit_loop
       rescue RuntimeError => e
         puts e
       end
     end
+    @exit_loop = false
   end
 
-  def skip_the_game
+  def dealer_game
     if @dealer.miss_turn?
       @interface.dealer_miss_turn
     else
       @dealer.add_cards(@game_deck.get_cards(1))
       @interface.dealer_add_card
-      @interface.show_cards(@gamer, @dealer)
+      return @interface.show_cards(@gamer, @dealer) unless check_cards(@dealer)
+
+      finish_game
     end
   end
 
-  def add_cards
+  def check_cards(gamer)
+    gamer.cards_sum > BJ_SUM || (@dealer.deck_full? && @gamer.deck_full?)
+  end
+
+  def gamer_add_cards
     raise @interface.err_three_cards if @gamer.cards_num >= 3
 
     @gamer.add_cards(@game_deck.get_cards(1))
-    @interface.show_cards(@gamer, @dealer)
-  end
+    return @interface.show_cards(@gamer, @dealer) unless check_cards(@gamer)
 
-  def show_and_finish_game
-    @interface.show_cards(@gamer, @dealer, true)
     finish_game
   end
 
@@ -103,22 +99,23 @@ class Controller
       @bank.gamer_win
       @interface.gamer_win
     end
-    @interface.show_finish_bank(@gamer.name, @dealer.name, @bank)
-    flush_gamers_cards
+    show_gamers_cards
   end
 
-  def flush_gamers_cards
+  def show_gamers_cards
+    @interface.show_cards(@gamer, @dealer, HIDE_DEALER_CARDS)
+    @interface.show_finish_bank(@gamer.name, @dealer.name, @bank)
     @dealer.deck.flush
     @gamer.deck.flush
     @game_deck.flush
+    @exit_loop = BREAK_LOOP
   end
 
   def call_item_handler(menu, item)
-    item = '0' if item.nil?
-    return unless menu[item.to_i] && number?(item)
+    return @exit_loop = BREAK_LOOP if @interface.break_menu?(item)
+    return @exit_loop = INCORRECT_CHOICE unless menu[item.to_i] && number?(item)
 
     send(menu[item.to_i][:handler])
-    menu[item.to_i][:exit_loop]
   end
 
   def number?(number_str)

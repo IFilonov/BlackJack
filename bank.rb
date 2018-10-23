@@ -23,11 +23,7 @@ class Bank
   end
 
   def enough_money_for_game?
-    if @accounts[:gamer] >= GAME_SUM_MONEY && @accounts[:dealer] >= GAME_SUM_MONEY
-      return true
-    end
-
-    false
+    @accounts[:gamer] >= GAME_SUM_MONEY && @accounts[:dealer] >= GAME_SUM_MONEY
   end
 
   def rollback
