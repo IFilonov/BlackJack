@@ -8,6 +8,7 @@ class Card
   PICT_VALUE = 10
   ERR_N = 'Error! Not correct number!'.freeze
   ERR_T = 'Error! Not correct type!'.freeze
+  ACE_REGEXP = /^[TТ]$/
 
   def initialize(number, type)
     @number = number
@@ -27,7 +28,7 @@ class Card
   end
 
   def ace?
-    @name.include?(NUMBERS.last)
+    @number =~ ACE_REGEXP
   end
 
   def validate!
